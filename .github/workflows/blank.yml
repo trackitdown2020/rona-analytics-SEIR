@@ -1,0 +1,17 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: akhileshns/heroku-deploy@v3.7.8 # This is the action
+        with:
+          heroku_api_key: b5cf7f53-db12-431e-bb5a-1474578cc9d6
+          heroku_app_name: rona-analytics #Must be unique in Heroku
+          heroku_email: danielleng510@gmail.com
