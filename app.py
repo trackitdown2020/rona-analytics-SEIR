@@ -1,6 +1,5 @@
 from scipy.integrate import odeint
 import numpy as np
-import json
 from json import JSONEncoder
 
 import requests
@@ -9,7 +8,7 @@ import python_countries
 from flask import Flask
 
 from youtube_transcript_api import YouTubeTranscriptApi
-from transformers import AutoTokenizer, AutoModel, pipeline, T5ForConditionalGeneration, T5Tokenizer
+from transformers import T5ForConditionalGeneration, T5Tokenizer
 
 
 class NumpyArrayEncoder(JSONEncoder):
