@@ -8,6 +8,9 @@ import json
 import python_countries
 from flask import Flask
 
+from youtube_transcript_api import YouTubeTranscriptApi
+from transformers import AutoTokenizer, AutoModel, pipeline, T5ForConditionalGeneration, T5Tokenizer
+
 
 class NumpyArrayEncoder(JSONEncoder):
     """
@@ -92,6 +95,8 @@ def seir_model(susceptible, exposed, infected, resistant):
     return results_json
 
 
+# youtube-transcript
+
 app = Flask(__name__)
 
 
@@ -100,9 +105,9 @@ def index():
     return "test"
 
 
-@app.route('/<country>/<status>')
-def dataModel(country, status):
-    url = 'https://api.covid19api.com/total/country/' + country + '/status/' + status
+@app.route('/seir/<country>/')
+def dataModel(country):
+    url = 'https://api.covid19api.com/total/country/' + country + '/status/confirmed'
     data = requests.get(url).json()
     infected = data[0]['Cases']
 
@@ -113,3 +118,41 @@ def dataModel(country, status):
     model = seir_model(population, infected, 0, 0)
 
     return model
+
+
+def format_transcript(summary_json):
+    text = ""
+    for i in summary_json:
+        text += i['text']
+        text += ". "
+    return text
+
+
+@app.route('/summary/<videoId>/')
+def summaryGenerator(videoId):
+    summary = YouTubeTranscriptApi.get_transcript(videoId)
+    text = format_transcript(summary)
+
+    # initialize model pretrained
+    model = T5ForConditionalGeneration.from_pretrained("t5-base")
+    # initialize model tokenizer
+    tokenizer = T5Tokenizer.from_pretrained("t5-base")
+
+    inputs = tokenizer.encode(
+        "summarize: " + text,
+        return_tensors="pt",
+        max_length=512,
+        truncation=True
+    )
+
+    #hypertune parameters later. what features to use for tuning these parameters?
+    outputs = model.generate(
+        inputs,
+        max_length=150,
+        min_length=40,
+        length_penalty=2.0,
+        num_beams=4,
+        early_stopping=True)
+
+    summary_text = str(tokenizer.decode(outputs[0]))
+    return summary_text
