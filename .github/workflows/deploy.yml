@@ -24,3 +24,4 @@ jobs:
           heroku_app_name: rona-analytics #Must be unique in Heroku
           heroku_email: danielleng510@gmail.com
           dontuseforce: 0
+          procfile: 1
