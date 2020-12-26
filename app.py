@@ -102,7 +102,7 @@ def index():
 
 
 @app.route('/seir/<country>/')
-def dataModel(country):
+def data_model(country):
     url = 'https://api.covid19api.com/total/country/' + country + '/status/confirmed'
     data = requests.get(url).json()
     infected = data[0]['Cases']
