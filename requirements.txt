@@ -24,6 +24,6 @@ torch==1.7.1
 tqdm==4.54.1
 transformers==4.1.1
 typing-extensions==3.7.4.3
-urllib3==1.26.2
+urllib3==1.26.4
 Werkzeug==1.0.1
 youtube-transcript-api==0.3.1
