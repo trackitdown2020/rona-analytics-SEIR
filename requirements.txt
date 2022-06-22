@@ -9,7 +9,7 @@ itsdangerous==1.1.0
 Jinja2==2.11.2
 joblib==1.0.0
 MarkupSafe==1.1.1
-numpy==1.19.4
+numpy==1.22.0
 packaging==20.8
 pyparsing==2.4.7
 python-countries==1.0.1
